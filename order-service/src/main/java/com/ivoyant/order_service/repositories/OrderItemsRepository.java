@@ -8,5 +8,5 @@ import com.ivoyant.order_service.models.OrderItemsModel;
 
 public interface OrderItemsRepository extends JpaRepository<OrderItemsModel, Integer> {
     
-    List<OrderItemsModel> findByOrderId(int orderId);
+    List<OrderItemsModel> findByOrder_OrderId(int orderId);
 }

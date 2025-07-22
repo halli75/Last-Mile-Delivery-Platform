@@ -1,15 +1,15 @@
 package com.ivoyant.order_service.models;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.ivoyant.order_service.repositories.OrderStatusHistoryRepository;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -17,8 +17,11 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "orderdatabase")
+@Table(name = "order_table")
 public class OrderModel implements Serializable {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
 
     private String restaurant;
@@ -29,19 +32,19 @@ public class OrderModel implements Serializable {
     private double customerLat;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<OrderItemsModel> itemsOrdered;
 
-    private LocalDateTime timeOrdered;
+    private LocalDateTime timeOrdered = LocalDateTime.now();
 
-    private String orderStatus;
+    private String orderStatus = "PLACED";
 
     private int driverId;
     private int customerId;
 
-    @Autowired
-    private OrderStatusHistoryRepository newStatusRepo;
+    public OrderModel() {}
 
-    public OrderModel(int customerId, double customerLat, double customerLong, List<OrderItemsModel> itemsOrdered, String restaurant, double restaurantLat, double restaurantLong) {
+    public OrderModel(int customerId, double customerLat, double customerLong, List<OrderItemsModel> itemsOrdered, String restaurant, double restaurantLat, double restaurantLong, int driverId) {
         this.customerId = customerId;
         this.customerLat = customerLat;
         this.customerLong = customerLong;
@@ -49,12 +52,16 @@ public class OrderModel implements Serializable {
         this.restaurant = restaurant;
         this.restaurantLat = restaurantLat;
         this.restaurantLong = restaurantLong;
+        this.driverId = driverId;
 
-        timeOrdered = LocalDateTime.now();
+        this.timeOrdered = LocalDateTime.now();
+        this.orderStatus = "PLACED";
 
-        orderStatus = "PLACED";
-
-        
+        if (this.itemsOrdered != null) {
+            for (OrderItemsModel item : this.itemsOrdered) {
+                item.setOrder(this);
+            }
+        }
     }
 
     

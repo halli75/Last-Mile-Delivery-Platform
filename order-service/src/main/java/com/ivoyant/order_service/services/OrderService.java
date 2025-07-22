@@ -1,12 +1,16 @@
 package com.ivoyant.order_service.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ivoyant.order_service.models.OrderItemsModel;
 import com.ivoyant.order_service.models.OrderModel;
 import com.ivoyant.order_service.models.OrderStatusHistoryModel;
+import com.ivoyant.order_service.repositories.OrderItemsRepository;
 import com.ivoyant.order_service.repositories.OrderRepository;
 import com.ivoyant.order_service.repositories.OrderStatusHistoryRepository;
 
@@ -16,10 +20,17 @@ public class OrderService {
     OrderRepository orderRepository; 
     @Autowired
     OrderStatusHistoryRepository orderStatusHistoryRepository;
+    @Autowired
+    OrderItemsRepository orderItemsRepository;
 
 
     public void setOrderStatus(int orderId){
+        
         OrderModel order = getOrder(orderId);
+        if(order == null){
+            System.out.println("Order ID: " + orderId + " is not a legitimate order ID");
+            return;
+        }
         String currentStatus = order.getOrderStatus();
         
         String[] possibleStatus = {"PLACED", "FINDING_DRIVER", "DRIVER_ASSIGNED", 
@@ -36,9 +47,24 @@ public class OrderService {
             
                     OrderStatusHistoryModel newStatus = new OrderStatusHistoryModel(orderId, currentStatus);
                     orderStatusHistoryRepository.save(newStatus);
-                    break;
+                    return;
                 }
             }
+        System.out.println("Status: " + currentStatus + " is not a legitimate status");    
+    }
+    public int addOrder(OrderModel order){
+        OrderModel savedOrder = orderRepository.save(order);
+        
+        List<OrderItemsModel> items = order.getItemsOrdered();
+        for (OrderItemsModel item : items) {
+            item.setOrder(savedOrder);
+            orderItemsRepository.save(item);
+        }
+        
+        OrderStatusHistoryModel newStatus = new OrderStatusHistoryModel(savedOrder.getOrderId(), savedOrder.getOrderStatus());
+        orderStatusHistoryRepository.save(newStatus);
+
+        return savedOrder.getOrderId();
     }
 
     public OrderModel getOrder(int orderId){
@@ -48,5 +74,16 @@ public class OrderService {
         }
         return null;
 
+    }
+
+    public List<OrderModel> getCustomerOrderHistory(int customerId){
+        List<Integer> orderIds = orderRepository.findOrderIdsByCustomerId(customerId);
+
+        List<OrderModel> rtn = new ArrayList<OrderModel>();
+        for (Integer OrderId : orderIds) {
+            rtn.add(getOrder(OrderId));
+        }
+
+        return rtn;
     }
 }
