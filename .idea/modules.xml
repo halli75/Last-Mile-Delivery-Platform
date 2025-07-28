@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Last-Mile-Delivery-Platform.iml" filepath="$PROJECT_DIR$/.idea/Last-Mile-Delivery-Platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/route-service.iml" filepath="$PROJECT_DIR$/route-service.iml" />
     </modules>
   </component>
 </project>
