@@ -1,0 +1,34 @@
+
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/orders/**
+        - id: driver-service
+          uri: lb://driver-service
+          predicates:
+            - Path=/drivers/**
+        - id: vehicle-service
+          uri: lb://vehicle-service
+          predicates:
+            - Path=/vehicles/**
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/customers/**
+        - id: gps-service
+          uri: lb://gps-service
+          predicates:
+            - Path=/gps/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
