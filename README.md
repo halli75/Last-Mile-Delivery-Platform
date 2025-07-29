@@ -1,9 +1,9 @@
 Last-Mile Delivery Platform
 Project Overview
-A comprehensive last-mile delivery platform similar to DoorDash, Uber Eats, or Amazon
-Fresh, designed to handle the final leg of package delivery from distribution centers to
-customers.
-Core Microservices Architecture
+A comprehensive last-mile delivery platform similar to DoorDash, Uber Eats, or Amazon Fresh, designed to handle the final leg of package delivery from distribution centers to customers.
+
+*Core Microservices Architecture
+
 1. Order Service
 Responsibilities:
 • Order creation, modification, and cancellation
@@ -16,7 +16,7 @@ Key APIs:
 • PUT /orders/{orderId}/status - Update order status
 • GET /orders/customer/{customerId} - Get customer order history
 Database: PostgreSQL with tables for orders, order_items, order_status_history
-2. Customer Service
+3. Customer Service
 Responsibilities:
 • Customer profile management
 • Delivery preferences and addresses
@@ -28,7 +28,7 @@ Key APIs:
 • PUT /customers/{customerId}/addresses - Manage delivery addresses
 • GET /customers/{customerId}/preferences - Get delivery preferences
 Database: PostgreSQL with customer profiles, addresses, preferences
-3. Driver Service
+4. Driver Service
 Responsibilities:
 • Driver onboarding and profile management
 • Driver availability and shift management
@@ -40,7 +40,7 @@ Key APIs:
 • GET /drivers/available - Get available drivers in area
 • GET /drivers/{driverId}/performance - Get driver metrics
 Database: PostgreSQL for driver profiles, availability, performance metrics
-4. Vehicle Service
+5. Vehicle Service
 Responsibilities:
 • Fleet management and vehicle registration
 • Vehicle maintenance scheduling
@@ -52,7 +52,7 @@ Key APIs:
 • PUT /vehicles/{vehicleId}/maintenance - Schedule maintenance
 • GET /vehicles/driver/{driverId} - Get driver's assigned vehicles
 Database: PostgreSQL for vehicle details, maintenance records, assignments
-5. Route Service
+6. Route Service
 Responsibilities:
 • Route optimization and planning
 • Distance and time estimation
@@ -64,7 +64,7 @@ Key APIs:
 • PUT /routes/{routeId}/update - Update route based on real-time conditions
 • GET /routes/estimate - Get delivery time estimate
 Database: PostgreSQL for route data, Redis for caching frequent routes
-6. GPS Service
+7. GPS Service
 Responsibilities:
 • Real-time location tracking
 • Geofencing and delivery zone management
@@ -76,7 +76,7 @@ Key APIs:
 • GET /gps/order/{orderId}/eta - Get estimated delivery time
 • POST /gps/geofence - Create delivery zone boundaries
 Database: MongoDB for location data, Redis for real-time tracking
-7. Delivery Service
+8. Delivery Service
 Responsibilities:
 • Delivery execution and workflow management
 • Proof of delivery (photos, signatures)
@@ -88,7 +88,7 @@ Key APIs:
 • POST /deliveries/{deliveryId}/complete - Mark delivery complete
 • POST /deliveries/{deliveryId}/proof - Upload delivery proof
 Database: PostgreSQL for delivery records, AWS S3 for proof images
-8. Notification Service
+9. Notification Service
 Responsibilities:
 • Real-time notifications to customers and drivers
 • SMS, email, and push notification delivery
@@ -100,7 +100,7 @@ Key APIs:
 • PUT /notifications/preferences - Update notification preferences
 • POST /notifications/bulk - Send bulk notifications
 Database: PostgreSQL for notification logs, Redis for real-time delivery
-9. Analytics Service
+10. Analytics Service
 Responsibilities:
 • Delivery performance metrics
 • Customer satisfaction analysis
